@@ -5,50 +5,45 @@ export function activate(context: vscode.ExtensionContext) {
     const helloWorldProvider = new HelloWorldProvider();
     vscode.window.registerTreeDataProvider('helloWorldView', helloWorldProvider);
 
-    // Create status bar items for each button with blue underline
-    const homeButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
-    const chatButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 99);
-    const settingsButton = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 98);
-
-    // Function to update button styles
-    const updateButtonStyles = (activeView: string) => {
-        const blueUnderline = '$(debug-stackframe-active)'; // Using built-in icon as underline
-        homeButton.text = `$(home)${activeView === 'hello' ? '\n' + blueUnderline : ''}`;
-        chatButton.text = `$(comment)${activeView === 'chat' ? '\n' + blueUnderline : ''}`;
-        settingsButton.text = `$(gear)${activeView === 'settings' ? '\n' + blueUnderline : ''}`;
-        
-        homeButton.show();
-        chatButton.show();
-        settingsButton.show();
-    };
-
-    // Register commands
+    // Register commands with their active states
     let helloWorldCommand = vscode.commands.registerCommand('helloWorld.openHelloWorld', () => {
         helloWorldProvider.setView('hello');
-        updateButtonStyles('hello');
+        vscode.commands.executeCommand('setContext', 'helloWorld.activeView', 'hello');
+    });
+    let helloWorldActiveCommand = vscode.commands.registerCommand('helloWorld.openHelloWorldActive', () => {
+        helloWorldProvider.setView('hello');
+        vscode.commands.executeCommand('setContext', 'helloWorld.activeView', 'hello');
     });
 
     let chatInterfaceCommand = vscode.commands.registerCommand('helloWorld.openChatInterface', () => {
         helloWorldProvider.setView('chat');
-        updateButtonStyles('chat');
+        vscode.commands.executeCommand('setContext', 'helloWorld.activeView', 'chat');
+    });
+    let chatInterfaceActiveCommand = vscode.commands.registerCommand('helloWorld.openChatInterfaceActive', () => {
+        helloWorldProvider.setView('chat');
+        vscode.commands.executeCommand('setContext', 'helloWorld.activeView', 'chat');
     });
 
     let settingsCommand = vscode.commands.registerCommand('helloWorld.openSettings', () => {
         helloWorldProvider.setView('settings');
-        updateButtonStyles('settings');
+        vscode.commands.executeCommand('setContext', 'helloWorld.activeView', 'settings');
+    });
+    let settingsActiveCommand = vscode.commands.registerCommand('helloWorld.openSettingsActive', () => {
+        helloWorldProvider.setView('settings');
+        vscode.commands.executeCommand('setContext', 'helloWorld.activeView', 'settings');
     });
 
-    // Set initial button styles
-    updateButtonStyles('hello');
+    // Set initial context
+    vscode.commands.executeCommand('setContext', 'helloWorld.activeView', 'hello');
 
-    // Add all items to subscriptions
+    // Add all commands to subscriptions
     context.subscriptions.push(
-        helloWorldCommand, 
-        chatInterfaceCommand, 
+        helloWorldCommand,
+        helloWorldActiveCommand,
+        chatInterfaceCommand,
+        chatInterfaceActiveCommand,
         settingsCommand,
-        homeButton,
-        chatButton,
-        settingsButton
+        settingsActiveCommand
     );
 }
 

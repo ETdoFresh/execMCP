@@ -12,6 +12,17 @@
     "activationEvents": [],
     "main": "./out/extension.js",
     "contributes": {
+        "colors": [
+            {
+                "id": "helloWorld.activeButton",
+                "description": "Color for the active button indicator",
+                "defaults": {
+                    "dark": "#0078D4",
+                    "light": "#0078D4",
+                    "highContrast": "#0078D4"
+                }
+            }
+        ],
         "viewsContainers": {
             "activitybar": [
                 {
@@ -36,31 +47,61 @@
                 "icon": "$(home)"
             },
             {
+                "command": "helloWorld.openHelloWorldActive",
+                "title": "Open Hello World",
+                "icon": "$(root-folder)"
+            },
+            {
                 "command": "helloWorld.openChatInterface",
                 "title": "Open Chat Interface",
                 "icon": "$(comment)"
             },
             {
+                "command": "helloWorld.openChatInterfaceActive",
+                "title": "Open Chat Interface",
+                "icon": "$(comment-discussion)"
+            },
+            {
                 "command": "helloWorld.openSettings",
                 "title": "Open Settings",
                 "icon": "$(gear)"
+            },
+            {
+                "command": "helloWorld.openSettingsActive",
+                "title": "Open Settings",
+                "icon": "$(settings-gear)"
             }
         ],
         "menus": {
             "view/title": [
                 {
                     "command": "helloWorld.openHelloWorld",
-                    "when": "view == helloWorldView",
+                    "when": "view == helloWorldView && helloWorld.activeView != hello",
+                    "group": "navigation@1"
+                },
+                {
+                    "command": "helloWorld.openHelloWorldActive",
+                    "when": "view == helloWorldView && helloWorld.activeView == hello",
                     "group": "navigation@1"
                 },
                 {
                     "command": "helloWorld.openChatInterface",
-                    "when": "view == helloWorldView",
+                    "when": "view == helloWorldView && helloWorld.activeView != chat",
+                    "group": "navigation@2"
+                },
+                {
+                    "command": "helloWorld.openChatInterfaceActive",
+                    "when": "view == helloWorldView && helloWorld.activeView == chat",
                     "group": "navigation@2"
                 },
                 {
                     "command": "helloWorld.openSettings",
-                    "when": "view == helloWorldView",
+                    "when": "view == helloWorldView && helloWorld.activeView != settings",
+                    "group": "navigation@3"
+                },
+                {
+                    "command": "helloWorld.openSettingsActive",
+                    "when": "view == helloWorldView && helloWorld.activeView == settings",
                     "group": "navigation@3"
                 }
             ]
