@@ -1,5 +1,9 @@
 <custom_instructions>
-    <custom_instruction>Before completing a task, append what was done in task_history.md and automatically commit changes</custom_instruction>
+    
+    <custom_instruction>
+        Before completing a task, append what was done in task_history.md and automatically commit changes
+    </custom_instruction>
+
     <custom_requests>
         <request>After writing to task_history.md</request>
         <response>
@@ -13,7 +17,6 @@
             <commands>
                 <command>git status</command>
                 <command>git add .</command>
-                <command>git --no-pager diff --cached</command>
                 <command>git commit -m "Your commit message here"</command>
                 <command>git push</command>
             </commands>

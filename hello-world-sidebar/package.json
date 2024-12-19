@@ -31,6 +31,16 @@
         },
         "commands": [
             {
+                "command": "helloWorld.openHelloWorld",
+                "title": "Open Hello World",
+                "icon": "$(home)"
+            },
+            {
+                "command": "helloWorld.openChatInterface",
+                "title": "Open Chat Interface",
+                "icon": "$(comment)"
+            },
+            {
                 "command": "helloWorld.openSettings",
                 "title": "Open Settings",
                 "icon": "$(gear)"

@@ -24,3 +24,10 @@
   - Remove sidebar settings view
   - Restore webview panel implementation
   - Remove context-based view switching
+
+## 2024-12-19 - 1:45pm
+- Add Hello World and Chat Interface buttons
+  - Implement Hello World page with webview panel
+  - Implement Chat Interface page with webview panel
+  - Add navigation buttons to sidebar view
+  - Update package.json with new commands
