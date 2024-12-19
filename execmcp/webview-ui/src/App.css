@@ -1,0 +1,52 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--vscode-font-family);
+  background-color: var(--vscode-editor-background);
+  color: var(--vscode-foreground);
+}
+
+.app {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Import highlight.js theme for code syntax highlighting */
+@import '~highlight.js/styles/github-dark.css';
+
+/* Override highlight.js theme colors to use VS Code theme variables */
+.hljs {
+  background: var(--vscode-editor-background);
+  color: var(--vscode-editor-foreground);
+}
+
+.hljs-keyword {
+  color: var(--vscode-symbolIcon-keywordForeground);
+}
+
+.hljs-string {
+  color: var(--vscode-symbolIcon-stringForeground);
+}
+
+.hljs-number {
+  color: var(--vscode-symbolIcon-numberForeground);
+}
+
+.hljs-comment {
+  color: var(--vscode-symbolIcon-operatorForeground);
+}
+
+/* VS Code Webview UI Toolkit overrides */
+vscode-button {
+  margin: 0;
+  padding: 0;
+}
+
+vscode-text-area {
+  width: 100%;
+  min-height: 60px;
+  max-height: 200px;
+  resize: vertical;
+}

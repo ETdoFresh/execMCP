@@ -3,12 +3,20 @@
 src/**
 .gitignore
 .yarnrc
+webpack.config.js
 vsc-extension-quickstart.md
 **/tsconfig.json
 **/.eslintrc.json
 **/*.map
 **/*.ts
-.github/**
-.git/**
 node_modules/**
-test/**
+webview-ui/node_modules/**
+webview-ui/src/**
+webview-ui/public/**
+webview-ui/scripts/**
+webview-ui/package.json
+webview-ui/package-lock.json
+webview-ui/tsconfig.json
+
+# Keep webview build files
+!webview-ui/build/**

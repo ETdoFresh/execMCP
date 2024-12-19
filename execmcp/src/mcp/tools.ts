@@ -1,117 +1,127 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs/promises';
 import * as path from 'path';
-import { IMCPTool, IMCPToolResult } from './types';
-import { exec } from 'child_process';
-import { promisify } from 'util';
+import { IMCPTool } from './types';
 
-const execAsync = promisify(exec);
+export const toolsMap = new Map<string, IMCPTool>([
+    ['read_file', {
+        name: 'read_file',
+        description: 'Read contents of a file',
+        requiresApproval: false,
+        execute: async (params) => {
+            try {
+                const filePath = params.path;
+                if (!filePath) {
+                    throw new Error('Path parameter is required');
+                }
 
-export const readFileTool: IMCPTool = {
-    name: 'read_file',
-    description: 'Read contents of a file',
-    requiresApproval: false,
-    async execute(params: { path: string }): Promise<IMCPToolResult> {
-        try {
-            const content = await fs.readFile(params.path, 'utf-8');
-            return { success: true, output: content };
-        } catch (error: any) {
-            return { success: false, output: '', error: error?.message || 'Unknown error' };
+                const content = await fs.readFile(filePath, 'utf8');
+                return {
+                    success: true,
+                    output: content
+                };
+            } catch (error: any) {
+                return {
+                    success: false,
+                    error: error.message
+                };
+            }
         }
-    }
-};
+    }],
+    ['write_file', {
+        name: 'write_file',
+        description: 'Write content to a file',
+        requiresApproval: true,
+        execute: async (params) => {
+            try {
+                const { path: filePath, content } = params;
+                if (!filePath || content === undefined) {
+                    throw new Error('Path and content parameters are required');
+                }
 
-export const writeFileTool: IMCPTool = {
-    name: 'write_to_file',
-    description: 'Write content to a file',
-    requiresApproval: true,
-    async execute(params: { path: string; content: string }): Promise<IMCPToolResult> {
-        try {
-            await fs.mkdir(path.dirname(params.path), { recursive: true });
-            await fs.writeFile(params.path, params.content);
-            return { success: true, output: `File written successfully: ${params.path}` };
-        } catch (error: any) {
-            return { success: false, output: '', error: error?.message || 'Unknown error' };
+                // Create directories if they don't exist
+                await fs.mkdir(path.dirname(filePath), { recursive: true });
+                await fs.writeFile(filePath, content, 'utf8');
+
+                return {
+                    success: true,
+                    output: `Successfully wrote to file: ${filePath}`
+                };
+            } catch (error: any) {
+                return {
+                    success: false,
+                    error: error.message
+                };
+            }
         }
-    }
-};
+    }],
+    ['list_files', {
+        name: 'list_files',
+        description: 'List files in a directory',
+        requiresApproval: false,
+        execute: async (params) => {
+            try {
+                const dirPath = params.path || '.';
+                const recursive = params.recursive === true;
 
-export const executeCommandTool: IMCPTool = {
-    name: 'execute_command',
-    description: 'Execute a shell command',
-    requiresApproval: true,
-    async execute(params: { command: string }): Promise<IMCPToolResult> {
-        try {
-            const { stdout, stderr } = await execAsync(params.command);
-            return { 
-                success: !stderr,
-                output: stdout,
-                error: stderr || undefined
-            };
-        } catch (error: any) {
-            return { success: false, output: '', error: error?.message || 'Unknown error' };
+                if (recursive) {
+                    const files: string[] = [];
+                    async function walk(dir: string) {
+                        const items = await fs.readdir(dir, { withFileTypes: true });
+                        for (const item of items) {
+                            const fullPath = path.join(dir, item.name);
+                            if (item.isDirectory()) {
+                                await walk(fullPath);
+                            } else {
+                                files.push(fullPath);
+                            }
+                        }
+                    }
+                    await walk(dirPath);
+                    return {
+                        success: true,
+                        output: files.join('\n')
+                    };
+                } else {
+                    const files = await fs.readdir(dirPath);
+                    return {
+                        success: true,
+                        output: files.join('\n')
+                    };
+                }
+            } catch (error: any) {
+                return {
+                    success: false,
+                    error: error.message
+                };
+            }
         }
-    }
-};
+    }],
+    ['execute_command', {
+        name: 'execute_command',
+        description: 'Execute a shell command',
+        requiresApproval: true,
+        execute: async (params) => {
+            try {
+                const { command } = params;
+                if (!command) {
+                    throw new Error('Command parameter is required');
+                }
 
-export const searchFilesTool: IMCPTool = {
-    name: 'search_files',
-    description: 'Search for files matching a pattern',
-    requiresApproval: false,
-    async execute(params: { pattern: string; path: string }): Promise<IMCPToolResult> {
-        try {
-            const files = await vscode.workspace.findFiles(
-                new vscode.RelativePattern(params.path, params.pattern)
-            );
-            return { 
-                success: true,
-                output: files.map(f => f.fsPath).join('\n')
-            };
-        } catch (error: any) {
-            return { success: false, output: '', error: error?.message || 'Unknown error' };
+                const terminal = vscode.window.createTerminal('ExecMCP');
+                terminal.show();
+                terminal.sendText(command);
+
+                return {
+                    success: true,
+                    output: `Executing command: ${command}`
+                };
+            } catch (error: any) {
+                return {
+                    success: false,
+                    error: error.message
+                };
+            }
         }
-    }
-};
-
-export const listFilesTool: IMCPTool = {
-    name: 'list_files',
-    description: 'List files in a directory',
-    requiresApproval: false,
-    async execute(params: { path: string }): Promise<IMCPToolResult> {
-        try {
-            const files = await fs.readdir(params.path);
-            return { success: true, output: files.join('\n') };
-        } catch (error: any) {
-            return { success: false, output: '', error: error?.message || 'Unknown error' };
-        }
-    }
-};
-
-export const replaceInFileTool: IMCPTool = {
-    name: 'replace_in_file',
-    description: 'Replace content in a file',
-    requiresApproval: true,
-    async execute(params: { path: string; search: string; replace: string }): Promise<IMCPToolResult> {
-        try {
-            const content = await fs.readFile(params.path, 'utf-8');
-            const newContent = content.replace(params.search, params.replace);
-            await fs.writeFile(params.path, newContent);
-            return { success: true, output: `File updated successfully: ${params.path}` };
-        } catch (error: any) {
-            return { success: false, output: '', error: error?.message || 'Unknown error' };
-        }
-    }
-};
-
-export const tools: IMCPTool[] = [
-    readFileTool,
-    writeFileTool,
-    executeCommandTool,
-    searchFilesTool,
-    listFilesTool,
-    replaceInFileTool
-];
-
-export const toolsMap = new Map<string, IMCPTool>(
-    tools.map(tool => [tool.name, tool])
-);
+    }]
+]);

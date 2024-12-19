@@ -19,7 +19,7 @@ export class MCPService {
         };
     }
 
-    public async handleMessage(message: string): Promise<void> {
+    public async handleMessage(message: string): Promise<string> {
         const userMessage: IMCPMessage = {
             role: 'user',
             content: message,
@@ -34,8 +34,11 @@ export class MCPService {
             // For now, we'll just echo the message and demonstrate tool usage
             const response = await this.processMessage(message);
             await this.handleResponse(response);
+            return response.type === 'completion' ? response.content as string : 'Tool execution completed';
         } catch (error: any) {
-            this.outputChannel.appendLine(`Error: ${error?.message || 'Unknown error'}`);
+            const errorMessage = error?.message || 'Unknown error';
+            this.outputChannel.appendLine(`Error: ${errorMessage}`);
+            return `Error: ${errorMessage}`;
         }
     }
 
@@ -89,7 +92,7 @@ export class MCPService {
             }
 
             case 'progress':
-                this.state.context.progress = response.content as any;
+                this.state.context.progress = response.content;
                 this.outputChannel.appendLine(`Progress: ${JSON.stringify(response.content)}`);
                 break;
         }
@@ -134,7 +137,7 @@ export class MCPService {
 
         try {
             const result = await tool.execute(params);
-            this.addMessage('tool', result.success ? result.output : result.error || 'Tool execution failed');
+            this.addMessage('tool', result.success ? result.output || 'Success' : result.error || 'Tool execution failed');
         } catch (error: any) {
             this.addMessage('tool', `Tool execution error: ${error?.message || 'Unknown error'}`);
         } finally {

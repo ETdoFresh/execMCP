@@ -1,0 +1,99 @@
+.chat-view {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 1rem;
+    gap: 1rem;
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-right: 0.5rem;
+}
+
+.chat-input {
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-start;
+    padding: 0.5rem;
+    background-color: var(--vscode-editor-background);
+    border-top: 1px solid var(--vscode-widget-border);
+}
+
+.chat-row {
+    display: flex;
+    margin-bottom: 1rem;
+}
+
+.chat-row.user {
+    justify-content: flex-end;
+}
+
+.chat-bubble {
+    max-width: 80%;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    background-color: var(--vscode-editor-background);
+    border: 1px solid var(--vscode-widget-border);
+}
+
+.chat-row.user .chat-bubble {
+    background-color: var(--vscode-button-background);
+    color: var(--vscode-button-foreground);
+}
+
+.chat-row.assistant .chat-bubble {
+    background-color: var(--vscode-editor-background);
+    border-color: var(--vscode-button-background);
+}
+
+.chat-row.tool .chat-bubble {
+    background-color: var(--vscode-debugConsole-infoForeground);
+    color: var(--vscode-editor-background);
+}
+
+.chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.25rem;
+    font-size: 0.8em;
+    opacity: 0.8;
+}
+
+.chat-content {
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+vscode-text-area {
+    flex: 1;
+}
+
+vscode-button {
+    align-self: flex-end;
+    margin-bottom: 0.5rem;
+}
+
+/* Scrollbar styles */
+.chat-messages::-webkit-scrollbar {
+    width: 8px;
+}
+
+.chat-messages::-webkit-scrollbar-track {
+    background-color: var(--vscode-scrollbarSlider-background);
+    border-radius: 4px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+    background-color: var(--vscode-scrollbarSlider-hoverBackground);
+    border-radius: 4px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb:hover {
+    background-color: var(--vscode-scrollbarSlider-activeBackground);
+}

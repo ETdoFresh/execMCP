@@ -1,11 +1,20 @@
 out
+dist
 node_modules
 .vscode-test/
 *.vsix
 .DS_Store
-coverage
-.nyc_output
-.env
-dist/
-build/
-*.log
+
+# Webview build
+webview-ui/build
+webview-ui/node_modules
+webview-ui/.pnp
+webview-ui/.pnp.js
+webview-ui/coverage
+webview-ui/.env.local
+webview-ui/.env.development.local
+webview-ui/.env.test.local
+webview-ui/.env.production.local
+webview-ui/npm-debug.log*
+webview-ui/yarn-debug.log*
+webview-ui/yarn-error.log*
