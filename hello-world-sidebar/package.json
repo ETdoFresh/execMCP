@@ -26,11 +26,6 @@
                 {
                     "id": "helloWorldView",
                     "name": "Hello World"
-                },
-                {
-                    "id": "helloWorldSettings",
-                    "name": "Settings",
-                    "when": "helloWorld:showSettings"
                 }
             ]
         },

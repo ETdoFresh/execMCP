@@ -18,3 +18,9 @@
   - Replace webview panel with dedicated settings view
   - Add context-based view switching
   - Implement settings tree data provider
+
+## 2024-12-19 - 1:30pm
+- Revert settings implementation back to webview panel
+  - Remove sidebar settings view
+  - Restore webview panel implementation
+  - Remove context-based view switching
