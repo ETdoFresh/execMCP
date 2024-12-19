@@ -1,0 +1,21 @@
+<custom_instructions>
+    <custom_requests>
+        <request>User asks to git commit and possibly push</request>
+        <response>
+            <guidelines>
+                <guideline>Use present tense ("Add feature" not "Added feature")</guideline>
+                <guideline>Start with capital letter</guideline>
+                <guideline>No prefixes (like "feat:", "fix:", etc.)</guideline>
+                <guideline>Be descriptive but concise</guideline>
+                <guideline>Use dashes (-) for bullet points in multi-line messages</guideline>
+            </guidelines>
+            <commands>
+                <command>git status</command>
+                <command>git add .</command>
+                <command>git --no-pager diff --cached</command>
+                <command>git commit -m "Your commit message here"</command>
+                <command>git push</command>
+            </commands>
+        </response>
+    </custom_requests>
+</custom_instructions>
