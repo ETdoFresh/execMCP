@@ -14,52 +14,11 @@ export function activate(context: vscode.ExtensionContext) {
         helloWorldProvider.setView('chat');
     });
 
-    // Register the settings command
-    let disposable = vscode.commands.registerCommand('helloWorld.openSettings', () => {
-        const panel = vscode.window.createWebviewPanel(
-            'helloWorldSettings',
-            'Settings',
-            vscode.ViewColumn.One,
-            {
-                enableScripts: true
-            }
-        );
-        panel.webview.html = getSettingsWebviewContent();
+    let settingsCommand = vscode.commands.registerCommand('helloWorld.openSettings', () => {
+        helloWorldProvider.setView('settings');
     });
 
-    context.subscriptions.push(disposable, helloWorldCommand, chatInterfaceCommand);
-}
-
-function getSettingsWebviewContent() {
-    return `<!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Hello World Settings</title>
-        <style>
-            body {
-                padding: 20px;
-                color: var(--vscode-foreground);
-                font-family: var(--vscode-font-family);
-            }
-            .setting-item {
-                margin-bottom: 20px;
-            }
-            h2 {
-                color: var(--vscode-editor-foreground);
-                font-size: 1.2em;
-                margin-bottom: 10px;
-            }
-        </style>
-    </head>
-    <body>
-        <h2>Hello World Settings</h2>
-        <div class="setting-item">
-            <p>Settings panel for Hello World extension</p>
-        </div>
-    </body>
-    </html>`;
+    context.subscriptions.push(helloWorldCommand, chatInterfaceCommand, settingsCommand);
 }
 
 class HelloWorldProvider implements vscode.TreeDataProvider<HelloWorldItem> {
@@ -88,6 +47,15 @@ class HelloWorldProvider implements vscode.TreeDataProvider<HelloWorldItem> {
         } else if (this.currentView === 'chat') {
             items.push(new HelloWorldItem(
                 "Chat Interface",
+                vscode.TreeItemCollapsibleState.None
+            ));
+        } else if (this.currentView === 'settings') {
+            items.push(new HelloWorldItem(
+                "Settings",
+                vscode.TreeItemCollapsibleState.None
+            ));
+            items.push(new HelloWorldItem(
+                "Settings panel for Hello World extension",
                 vscode.TreeItemCollapsibleState.None
             ));
         }

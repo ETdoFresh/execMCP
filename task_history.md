@@ -44,3 +44,9 @@
   - Remove webview panels for main content
   - Add view state management to tree data provider
   - Keep Settings as a webview panel
+
+## 2024-12-19 - 2:30pm
+- Move settings to sidebar view
+  - Update settings to display in sidebar instead of webview panel
+  - Add settings state to tree data provider
+  - Remove webview panel implementation for settings
