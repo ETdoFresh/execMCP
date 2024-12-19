@@ -1,58 +1,49 @@
 import * as vscode from 'vscode';
 
 export function activate(context: vscode.ExtensionContext) {
-    // Create and register the tree data provider
+    // Create and register the tree data providers
     const helloWorldProvider = new HelloWorldProvider();
+    const settingsProvider = new SettingsProvider();
+    
     vscode.window.registerTreeDataProvider('helloWorldView', helloWorldProvider);
+    vscode.window.registerTreeDataProvider('helloWorldSettings', settingsProvider);
 
     // Register the settings command
     let disposable = vscode.commands.registerCommand('helloWorld.openSettings', () => {
-        // Create and show settings panel
-        const panel = vscode.window.createWebviewPanel(
-            'helloWorldSettings',
-            'Settings',
-            vscode.ViewColumn.One,
-            {
-                enableScripts: true
-            }
-        );
-
-        panel.webview.html = getSettingsWebviewContent();
+        const showSettings = context.workspaceState.get('helloWorld:showSettings', false);
+        context.workspaceState.update('helloWorld:showSettings', !showSettings);
+        vscode.commands.executeCommand('setContext', 'helloWorld:showSettings', !showSettings);
     });
 
     context.subscriptions.push(disposable);
 }
 
-function getSettingsWebviewContent() {
-    return `<!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Hello World Settings</title>
-        <style>
-            body {
-                padding: 20px;
-                color: var(--vscode-foreground);
-                font-family: var(--vscode-font-family);
-            }
-            .setting-item {
-                margin-bottom: 20px;
-            }
-            h2 {
-                color: var(--vscode-editor-foreground);
-                font-size: 1.2em;
-                margin-bottom: 10px;
-            }
-        </style>
-    </head>
-    <body>
-        <h2>Hello World Settings</h2>
-        <div class="setting-item">
-            <p>Settings panel for Hello World extension</p>
-        </div>
-    </body>
-    </html>`;
+class SettingsProvider implements vscode.TreeDataProvider<SettingsItem> {
+    getTreeItem(element: SettingsItem): vscode.TreeItem {
+        return element;
+    }
+
+    getChildren(): Thenable<SettingsItem[]> {
+        const items: SettingsItem[] = [
+            new SettingsItem(
+                "Settings",
+                "Hello World extension settings",
+                vscode.TreeItemCollapsibleState.None
+            )
+        ];
+        return Promise.resolve(items);
+    }
+}
+
+class SettingsItem extends vscode.TreeItem {
+    constructor(
+        public readonly label: string,
+        public readonly description: string,
+        public readonly collapsibleState: vscode.TreeItemCollapsibleState
+    ) {
+        super(label, collapsibleState);
+        this.description = description;
+    }
 }
 
 class HelloWorldProvider implements vscode.TreeDataProvider<HelloWorldItem> {
