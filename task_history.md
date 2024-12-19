@@ -50,3 +50,9 @@
   - Update settings to display in sidebar instead of webview panel
   - Add settings state to tree data provider
   - Remove webview panel implementation for settings
+
+## 2024-12-19 - 2:45pm
+- Add blue underline indicator for active page
+  - Implement status bar items for navigation buttons
+  - Add visual indicator using VSCode built-in icons
+  - Update button styles based on active view
