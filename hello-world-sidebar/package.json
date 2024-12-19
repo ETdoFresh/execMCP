@@ -28,6 +28,22 @@
                     "name": "Hello World"
                 }
             ]
+        },
+        "commands": [
+            {
+                "command": "helloWorld.openSettings",
+                "title": "Open Settings",
+                "icon": "$(gear)"
+            }
+        ],
+        "menus": {
+            "view/title": [
+                {
+                    "command": "helloWorld.openSettings",
+                    "when": "view == helloWorldView",
+                    "group": "navigation"
+                }
+            ]
         }
     },
     "scripts": {
