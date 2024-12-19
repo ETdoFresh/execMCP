@@ -37,3 +37,10 @@
   - Relocate Hello World and Chat Interface buttons to view title
   - Order buttons with proper navigation groups
   - Simplify sidebar tree view content
+
+## 2024-12-19 - 2:15pm
+- Update navigation to change sidebar content
+  - Modify Hello World and Chat Interface buttons to update sidebar directly
+  - Remove webview panels for main content
+  - Add view state management to tree data provider
+  - Keep Settings as a webview panel

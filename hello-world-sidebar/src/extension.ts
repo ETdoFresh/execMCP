@@ -7,32 +7,15 @@ export function activate(context: vscode.ExtensionContext) {
 
     // Register commands
     let helloWorldCommand = vscode.commands.registerCommand('helloWorld.openHelloWorld', () => {
-        const panel = vscode.window.createWebviewPanel(
-            'helloWorld',
-            'Hello World!',
-            vscode.ViewColumn.One,
-            {
-                enableScripts: true
-            }
-        );
-        panel.webview.html = getHelloWorldWebviewContent();
+        helloWorldProvider.setView('hello');
     });
 
     let chatInterfaceCommand = vscode.commands.registerCommand('helloWorld.openChatInterface', () => {
-        const panel = vscode.window.createWebviewPanel(
-            'chatInterface',
-            'Chat Interface',
-            vscode.ViewColumn.One,
-            {
-                enableScripts: true
-            }
-        );
-        panel.webview.html = getChatInterfaceWebviewContent();
+        helloWorldProvider.setView('chat');
     });
 
     // Register the settings command
     let disposable = vscode.commands.registerCommand('helloWorld.openSettings', () => {
-        // Create and show settings panel
         const panel = vscode.window.createWebviewPanel(
             'helloWorldSettings',
             'Settings',
@@ -41,65 +24,10 @@ export function activate(context: vscode.ExtensionContext) {
                 enableScripts: true
             }
         );
-
         panel.webview.html = getSettingsWebviewContent();
     });
 
     context.subscriptions.push(disposable, helloWorldCommand, chatInterfaceCommand);
-}
-
-function getHelloWorldWebviewContent() {
-    return `<!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Hello World!</title>
-        <style>
-            body {
-                padding: 20px;
-                color: var(--vscode-foreground);
-                font-family: var(--vscode-font-family);
-            }
-            h1 {
-                color: var(--vscode-editor-foreground);
-                font-size: 2em;
-                margin-bottom: 20px;
-            }
-        </style>
-    </head>
-    <body>
-        <h1>Hello World!</h1>
-        <p>Welcome to the Hello World page!</p>
-    </body>
-    </html>`;
-}
-
-function getChatInterfaceWebviewContent() {
-    return `<!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Chat Interface</title>
-        <style>
-            body {
-                padding: 20px;
-                color: var(--vscode-foreground);
-                font-family: var(--vscode-font-family);
-            }
-            h1 {
-                color: var(--vscode-editor-foreground);
-                font-size: 2em;
-                margin-bottom: 20px;
-            }
-        </style>
-    </head>
-    <body>
-        <h1>Chat Interface</h1>
-        <p>Welcome to the Chat Interface page!</p>
-    </body>
-    </html>`;
 }
 
 function getSettingsWebviewContent() {
@@ -135,16 +63,36 @@ function getSettingsWebviewContent() {
 }
 
 class HelloWorldProvider implements vscode.TreeDataProvider<HelloWorldItem> {
+    private _onDidChangeTreeData: vscode.EventEmitter<HelloWorldItem | undefined | null | void> = new vscode.EventEmitter<HelloWorldItem | undefined | null | void>();
+    readonly onDidChangeTreeData: vscode.Event<HelloWorldItem | undefined | null | void> = this._onDidChangeTreeData.event;
+
+    private currentView: string = 'hello';
+
+    setView(view: string) {
+        this.currentView = view;
+        this._onDidChangeTreeData.fire();
+    }
+
     getTreeItem(element: HelloWorldItem): vscode.TreeItem {
         return element;
     }
 
     getChildren(): Thenable<HelloWorldItem[]> {
-        const item = new HelloWorldItem(
-            "Hello World!",
-            vscode.TreeItemCollapsibleState.None
-        );
-        return Promise.resolve([item]);
+        const items: HelloWorldItem[] = [];
+        
+        if (this.currentView === 'hello') {
+            items.push(new HelloWorldItem(
+                "Hello World!",
+                vscode.TreeItemCollapsibleState.None
+            ));
+        } else if (this.currentView === 'chat') {
+            items.push(new HelloWorldItem(
+                "Chat Interface",
+                vscode.TreeItemCollapsibleState.None
+            ));
+        }
+
+        return Promise.resolve(items);
     }
 }
 
