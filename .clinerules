@@ -1,7 +1,24 @@
 <custom_instructions>
-    <custom_instruction>Before completing a task, append what was done in task_history.md</custom_instruction>
-    <custom_instruction>After completing a task, ask user if they want to commit and push</custom_instruction>
+    <custom_instruction>Before completing a task, append what was done in task_history.md and automatically commit changes</custom_instruction>
     <custom_requests>
+        <request>After writing to task_history.md</request>
+        <response>
+            <guidelines>
+                <guideline>Use present tense ("Add feature" not "Added feature")</guideline>
+                <guideline>Start with capital letter</guideline>
+                <guideline>No prefixes (like "feat:", "fix:", etc.)</guideline>
+                <guideline>Be descriptive but concise</guideline>
+                <guideline>Use dashes (-) for bullet points in multi-line messages</guideline>
+            </guidelines>
+            <commands>
+                <command>git status</command>
+                <command>git add .</command>
+                <command>git --no-pager diff --cached</command>
+                <command>git commit -m "Your commit message here"</command>
+                <command>git push</command>
+            </commands>
+        </response>
+
         <request>User asks to git commit and possibly push</request>
         <response>
             <guidelines>
