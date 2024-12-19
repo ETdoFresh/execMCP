@@ -49,9 +49,19 @@
         "menus": {
             "view/title": [
                 {
+                    "command": "helloWorld.openHelloWorld",
+                    "when": "view == helloWorldView",
+                    "group": "navigation@1"
+                },
+                {
+                    "command": "helloWorld.openChatInterface",
+                    "when": "view == helloWorldView",
+                    "group": "navigation@2"
+                },
+                {
                     "command": "helloWorld.openSettings",
                     "when": "view == helloWorldView",
-                    "group": "navigation"
+                    "group": "navigation@3"
                 }
             ]
         }

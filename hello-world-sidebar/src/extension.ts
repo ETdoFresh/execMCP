@@ -140,46 +140,20 @@ class HelloWorldProvider implements vscode.TreeDataProvider<HelloWorldItem> {
     }
 
     getChildren(): Thenable<HelloWorldItem[]> {
-        const items = [
-            new HelloWorldItem(
-                "Hello World!",
-                vscode.TreeItemCollapsibleState.None,
-                {
-                    command: 'helloWorld.openHelloWorld',
-                    title: 'Open Hello World'
-                }
-            ),
-            new HelloWorldItem(
-                "Chat Interface",
-                vscode.TreeItemCollapsibleState.None,
-                {
-                    command: 'helloWorld.openChatInterface',
-                    title: 'Open Chat Interface'
-                }
-            ),
-            new HelloWorldItem(
-                "Settings",
-                vscode.TreeItemCollapsibleState.None,
-                {
-                    command: 'helloWorld.openSettings',
-                    title: 'Open Settings'
-                }
-            )
-        ];
-        return Promise.resolve(items);
+        const item = new HelloWorldItem(
+            "Hello World!",
+            vscode.TreeItemCollapsibleState.None
+        );
+        return Promise.resolve([item]);
     }
 }
 
 class HelloWorldItem extends vscode.TreeItem {
     constructor(
         public readonly label: string,
-        public readonly collapsibleState: vscode.TreeItemCollapsibleState,
-        public readonly command?: vscode.Command
+        public readonly collapsibleState: vscode.TreeItemCollapsibleState
     ) {
         super(label, collapsibleState);
-        if (command) {
-            this.command = command;
-        }
     }
 }
 

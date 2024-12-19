@@ -31,3 +31,9 @@
   - Implement Chat Interface page with webview panel
   - Add navigation buttons to sidebar view
   - Update package.json with new commands
+
+## 2024-12-19 - 2:00pm
+- Move navigation buttons to title bar
+  - Relocate Hello World and Chat Interface buttons to view title
+  - Order buttons with proper navigation groups
+  - Simplify sidebar tree view content
